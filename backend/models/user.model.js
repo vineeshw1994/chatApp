@@ -2,11 +2,11 @@ import mongoose from "mongoose";
 
 
 const userSchema = new mongoose.Schema({
-    fullname:{
+    fullName:{
         type:String,
         required:true
     },
-    username:{
+    userName:{
         type:String,
         required:true,
         unique:true
@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
     },
     profilePic:{
         type:String,
-        default:'https://cdn-icons-png.flaticon.com/512/149/14907'
+        default:''
     }
 })
 
