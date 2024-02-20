@@ -22,13 +22,14 @@ export const login = async (req, res) => {
         })
 
     } catch (error) {
-        console.log('Error in signup controller', error.message)
+        console.log('Error in login controller', error.message)
         res.status(500).json({ error: 'Internal Server Error' })
     }
 }
 export const signup = async (req, res) => {
     try {
-        const { fullName, userName, password, confirmPassword, gender } = req.body
+        console.log('this is the signup function')
+        const { fullName, userName, password, confirmPassword,gender } = req.body
 
         if (password !== confirmPassword) {
             return res.status(400).json({ error: 'password does not match' })
@@ -62,7 +63,9 @@ export const signup = async (req, res) => {
             await newUser.save()
             res.status(200).json({
                 _id: newUser._id,
-                fullName: newUser.fullName, userName: newUser.userName, profilePic: newUser.profilePic
+                fullName: newUser.fullName, 
+                userName: newUser.userName, 
+                profilePic: newUser.profilePic
             })
         } else {
             res.status(400).json({ error: 'Invalid user data' })
@@ -70,7 +73,7 @@ export const signup = async (req, res) => {
 
 
     } catch (error) {
-        console.log('Error in login controller', error.message)
+        console.log('Error in signup controller', error.message)
         res.status(500).json({ error: 'Internal Server Error' })
     }
 }
