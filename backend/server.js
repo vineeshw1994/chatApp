@@ -9,7 +9,7 @@ import connetToMongoDB from './db/connectDb.js';
 const app = express(); 
 dotenv.config();
 
-app.use(express.json());
+app.use(express.json()); 
 app.use(cookieParser());
 
 const PORT = process.env.PORT || 5000;
