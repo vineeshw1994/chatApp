@@ -3,22 +3,22 @@ import bcrypt from 'bcryptjs';
 import generateToken from '../utils/generateToken.js';
 export const login = async (req, res) => {
     try {
-        
+
         const { userName, password } = req.body;
         const user = await User.findOne({ userName });
         const isPasswordCorrect = await bcrypt.compare(password, user?.password || " ");
 
-        if(!user || !isPasswordCorrect){
+        if (!user || !isPasswordCorrect) {
             return res.status(400).json({ error: 'Invalid credentials' });
         }
-         
-        generateToken(user._id,res);
+
+        generateToken(user._id, res);
 
         res.status(200).json({
-          _id: user._id,
-          fullName:user.fullName,
-          userName:user.userName,
-          profilePic: user.profilePic,  
+            _id: user._id,
+            fullName: user.fullName,
+            userName: user.userName,
+            profilePic: user.profilePic,
         })
 
     } catch (error) {
@@ -29,14 +29,18 @@ export const login = async (req, res) => {
 export const signup = async (req, res) => {
     try {
         console.log('this is the signup function')
-        const { fullName, userName, password, confirmPassword,gender } = req.body
+        const { fullName, userName, password, confirmPassword, gender } = req.body
+
+        // Check if userName is provided and not empty
+        if (!userName || userName.trim() === "") {
+            return res.status(400).json({ error: 'Username is required' })
+        }
 
         if (password !== confirmPassword) {
             return res.status(400).json({ error: 'password does not match' })
         }
 
         const user = await User.findOne({ userName })
-
         if (user) {
             return res.status(400).json({ error: 'user already exist' })
         }
@@ -50,7 +54,7 @@ export const signup = async (req, res) => {
         const girlProfilePic = `https://avatar.iran.liara.run/public/girl?userName=${userName}`
 
         const newUser = new User({
-            fullName,
+            fullName, 
             userName,
             password: hashPassword,
             gender,
@@ -58,13 +62,13 @@ export const signup = async (req, res) => {
         })
 
         if (newUser) {
-
+            console.log(newUser)
             generateToken(newUser._id, res)
             await newUser.save()
             res.status(200).json({
                 _id: newUser._id,
-                fullName: newUser.fullName, 
-                userName: newUser.userName, 
+                fullName: newUser.fullName,
+                userName: newUser.userName,
                 profilePic: newUser.profilePic
             })
         } else {
@@ -78,12 +82,12 @@ export const signup = async (req, res) => {
     }
 }
 export const logout = async (req, res) => {
-  try{
-    
-    res.cookie('jwt', " ", {maxAge :0})
-    res.status(500).json({ message: 'Logout successfully' })
-  }catch(error){
-    console.log('Error in logout controller', error.message)
-    res.status(500).json({ error: 'Internal Server Error' })
-  }
+    try {
+
+        res.cookie('jwt', " ", { maxAge: 0 })
+        res.status(500).json({ message: 'Logout successfully' })
+    } catch (error) {
+        console.log('Error in logout controller', error.message)
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
 }

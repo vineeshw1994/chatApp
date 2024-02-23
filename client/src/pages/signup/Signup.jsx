@@ -7,18 +7,18 @@ const Signup = () => {
 
   const [inputs, setInputs] = useState({
     fullName: "",
-    userName:"",
-    password:"",
-    confirmPassword:"",
-    gender:"male"
+    userName: "",
+    password: "",
+    confirmPassword: "",
+    gender: ""
   })
 
-const {loading,signup} = useSignup()
-const handleSubmit = async (e) =>{
-  e.preventDefault()
-  await signup(inputs)
+  const { loading, signup } = useSignup()
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    await signup(inputs)
 
-}
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-w-96 mx-auto">
@@ -80,16 +80,32 @@ const handleSubmit = async (e) =>{
             />
           </div>
 
-        {/* <GenderCheckbox onCheckBoxChange={handleCheckBoxChange} selectedGender={inputs.gender} /> */}
+          <div className="dropdown dropdown-top">
+          <label htmlFor="" className="label p-2">
+              <span className="text-base label-text">Gender</span>
+            </label>
+            <select
+              value={inputs.gender}
+              onChange={(e) => setInputs({ ...inputs, gender: e.target.value })}
+              className="btn m-1"
+            >
+              <option value="">Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+
 
           <Link to='/login' className="text-sm hover:underline hover:text-blue-600 mt-2 inline-block">
             Already have an account?
           </Link>
 
           <div>
-            <button className="btn btn-block btn-sm mt-2 bg-blue-600 hover:bg-sky-200 hover:text-teal-800">Sign Up</button>
+            <button className="btn btn-block btn-sm mt-2 bg-blue-600 hover:bg-sky-200 hover:text-teal-800" disabled={loading}>{
+              loading ? <span className="loading loading-spinner"></span> : 'Signup'
+            }</button>
           </div>
-
+         
         </form>
       </div>
     </div>
@@ -109,7 +125,7 @@ export default Signup;
 
 
 
-//this is the starter code 
+//this is the starter code
 
 // const Signup = () => {
 //   return (
